@@ -260,6 +260,8 @@
             expressao = expressao.replaceAll("×", "*");
             expressao = expressao.replaceAll("÷", "/");
 
+            expressao = expressao.replaceAll("√", "Math.sqrt");
+
             // porcentagem correta (50% + 60 = 0.5 + 60)
             expressao = expressao.replace(/(\d+(\.\d+)?)%/g, "($1/100)");
 
