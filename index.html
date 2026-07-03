@@ -7,9 +7,25 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Calculadora</title>
 
-    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6QSSCLH4L"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-J6QSSCLH4L');
+    </script>
+
+
 
     <style>
+        button {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
         body {
             overflow: hidden;
             margin: 0;
@@ -188,8 +204,14 @@
             </div>
 
             <div class="botoes">
-                <button class="limpar" onclick="limpar()">C</button>
+
+                <button onclick="add('(')">(</button>
+                <button onclick="add(')')">)</button>
+                <button onclick="limpar()">C</button>
+                <button onclick="apagar()">⌫</button>
+
                 <button onclick="raiz()">√</button>
+                <button onclick="raizCubica()">∛</button>
                 <button onclick="add('%')">%</button>
                 <button onclick="add('/')">÷</button>
 
@@ -212,6 +234,7 @@
                 <button onclick="add('0')">0</button>
                 <button onclick="add('^')">xʸ</button>
                 <button class="igual" onclick="calcular()">=</button>
+
             </div>
         </div>
     </div>
@@ -300,9 +323,13 @@
             expressao = expressao.replaceAll("÷", "/");
 
             expressao = expressao.replaceAll("√", "Math.sqrt");
+            expressao = expressao.replaceAll("∛", "Math.cbrt");
+
 
             // porcentagem correta (50% + 60 = 0.5 + 60)
             expressao = expressao.replace(/(\d+(\.\d+)?)%/g, "($1/100)");
+
+           
 
             // potência estilo JS
             expressao = expressao.replaceAll("^", "**");
@@ -321,6 +348,9 @@
                 fecha++;
             }
 
+            console.log(expressao);
+
+
             let resultado = eval(expressao);
 
             if (!isFinite(resultado)) {
@@ -331,6 +361,7 @@
             display.innerText = resultado;
 
         } catch (e) {
+            console.error(e);
             display.innerText = "Erro";
         }
     }
@@ -354,6 +385,26 @@
             display.scrollLeft += e.deltaY;
         }
     });
+
+    function apagar() {
+        display.innerText = display.innerText.slice(0, -1);
+
+        if (display.innerText === "" || display.innerText === "0") {
+            display.innerText = "0";
+        }
+    }
+
+    function raizCubica() {
+        if (display.innerText === "0") {
+            display.innerText = "∛(";
+        } else {
+            display.innerText += "∛(";
+        }
+
+        atualizarScroll();
+    }
+
+
 
     document.addEventListener("keydown", function (e) {
         const key = e.key;
